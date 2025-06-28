@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SAZIN TECH Pvt Ltd</title>
+  <style>
+    body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f3f4f6;
+  padding: 40px;
+  color: #333;
+  font-size: 20px; /* Increased base font size */
+}
+
+h1 {
+  text-align: center;
+  color: #1a73e8;
+  margin-bottom: 5px;
+  font-size: 36px;
+}
+
+h4 {
+  text-align: center;
+  color: #555;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  table-layout: fixed;
+}
+
+th {
+  background-color: #1a73e8;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 18px;
+  padding: 14px;
+}
+
+td {
+  text-align: center;
+  font-size: 18px;
+  padding: 14px;
+  border-bottom: 1px solid #e0e0e0;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 25px;
+  padding: 14px 28px;
+  background-color: #1a73e8;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button:hover {
+  background-color: #0f5ec9;
+}
+
+h3 {
+  text-align: right;
+  margin-top: 30px;
+  color: #111;
+  font-size: 22px;
+}
+
+#grandTotal {
+  font-weight: bold;
+  color: #1a73e8;
+}
+
+  </style>
+</head>
+
+<body>
+  <h1>SAZIN TECH Pvt Ltd</h1>
+  <h4>D-10,Industrial Area, New Siwan,Phase 1,Hardiya More <br>
+  opposite Paani Tanki ,Siwan Bihar, PIN-841226</h4>
+
+  <table id="table" border="1">
+    <tr>
+      <th>Length (mm)</th>
+      <th>Width (mm)</th>
+      <th>Perimeter (ft)</th>
+      <th>Area (sq ft)</th>
+      <th>Cost/Unit</th>
+      <th>Total</th>
+    </tr>
+  </table>
+
+  <button id="addrow">Add Row</button>
+  <h3>Grand Total: ₹ <span id="grandTotal">0.00</span></h3>
+
+  <script>
+    const addrow = document.getElementById('addrow');
+    addrow.addEventListener('click', addRow);
+
+    function addRow() {
+      const table = document.getElementById("table");
+      const newRow = table.insertRow();
+
+      const cell1 = newRow.insertCell(0);
+      const lengthInput = document.createElement("input");
+      lengthInput.type = "number";
+      cell1.appendChild(lengthInput);
+
+      const cell2 = newRow.insertCell(1);
+      const widthInput = document.createElement("input");
+      widthInput.type = "number";
+      cell2.appendChild(widthInput);
+
+      const cell3 = newRow.insertCell(2);
+      cell3.innerText = "";
+
+      const cell4 = newRow.insertCell(3);
+      cell4.innerText = "";
+
+      const cell5 = newRow.insertCell(4);
+      const costInput = document.createElement("input");
+      costInput.type = "number";
+      cell5.appendChild(costInput);
+
+      const cell6 = newRow.insertCell(5);
+      cell6.innerText = "";
+
+      function updatePerimeter() {
+        let length = parseFloat(lengthInput.value) * 0.00328084;
+        let width = parseFloat(widthInput.value) * 0.00328084;
+
+        if (!isNaN(length) && !isNaN(width)) {
+          const perimeter = 2 * (length + width);
+          cell3.innerText = perimeter.toFixed(2) + " ft";
+        } else {
+          cell3.innerText = "";
+        }
+      }
+
+      function updateArea() {
+        let length = parseFloat(lengthInput.value) * 0.00328084;
+        let width = parseFloat(widthInput.value) * 0.00328084;
+
+        if (!isNaN(length) && !isNaN(width)) {
+          const area = length * width;
+          cell4.innerText = area.toFixed(2) + " sq ft";
+        } else {
+          cell4.innerText = "";
+        }
+      }
+
+      function updateTotal() {
+        const cost = parseFloat(costInput.value);
+        let length = parseFloat(lengthInput.value) * 0.00328084;
+        let width = parseFloat(widthInput.value) * 0.00328084;
+
+        if (!isNaN(length) && !isNaN(width) && !isNaN(cost)) {
+          const total = (length * width) * cost;
+          cell6.innerText = total.toFixed(2);
+        } else {
+          cell6.innerText = "";
+        }
+
+        updateGrandTotal();
+      }
+
+      function updateGrandTotal() {
+        const rows = table.rows;
+        let total = 0;
+
+        for (let i = 1; i < rows.length; i++) {
+          const val = parseFloat(rows[i].cells[5].innerText);
+          if (!isNaN(val)) total += val;
+        }
+
+        document.getElementById("grandTotal").innerText = total.toFixed(2);
+      }
+
+      lengthInput.addEventListener("input", () => {
+        updatePerimeter();
+        updateArea();
+        updateTotal();
+      });
+
+      widthInput.addEventListener("input", () => {
+        updatePerimeter();
+        updateArea();
+        updateTotal();
+      });
+
+      costInput.addEventListener("input", updateTotal);
+    }
+  </script>
+</body>
+</html>
